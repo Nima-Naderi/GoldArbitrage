@@ -257,11 +257,21 @@ class GoldArbitrageFinder:
             print(f"🔺 Highest: {format_number_with_commas(str(int(highest.price)))} Rial ({highest.source})")
             print(f"📏 Range:   {format_number_with_commas(str(int(price_range)))} Rial ({range_percentage:.2f}%)")
     
-    def save_results_to_file(self, filename: str = None):
-        """Save results to a JSON file"""
+    def save_results_to_file(self, filename: str = None, results_folder: str = "arbitrage_results"):
+        """Save results to a JSON file in a specific folder"""
+        import os
+        
+        # Create results folder if it doesn't exist
+        if not os.path.exists(results_folder):
+            os.makedirs(results_folder)
+            print(f"📁 Created results folder: {results_folder}")
+        
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             filename = f"arbitrage_results_{timestamp}.json"
+        
+        # Create full file path
+        file_path = os.path.join(results_folder, filename)
         
         results = {
             "timestamp": datetime.now().isoformat(),
@@ -289,18 +299,19 @@ class GoldArbitrageFinder:
             ]
         }
         
-        with open(filename, 'w', encoding='utf-8') as f:
+        with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         
-        print(f"\n💾 Results saved to: {filename}")
+        print(f"\n💾 Results saved to: {file_path}")
     
-    def run_full_analysis(self, min_profit_percentage: float = 0.5, save_results: bool = True):
+    def run_full_analysis(self, min_profit_percentage: float = 0.5, save_results: bool = True, results_folder: str = "arbitrage_results"):
         """
         Run the complete arbitrage analysis
         
         Args:
             min_profit_percentage: Minimum profit percentage to consider
             save_results: Whether to save results to file
+            results_folder: Folder to save results in
         """
         print("🚀 GOLD ARBITRAGE FINDER")
         print("=" * 60)
@@ -325,7 +336,7 @@ class GoldArbitrageFinder:
         
         # Step 5: Save results if requested
         if save_results:
-            self.save_results_to_file()
+            self.save_results_to_file(results_folder=results_folder)
         
         print(f"\n✅ Analysis complete! Found {len(self.arbitrage_opportunities)} arbitrage opportunities.")
 
@@ -338,7 +349,14 @@ def main():
     # 0.5% means we only show opportunities with at least 0.5% profit
     min_profit = 0.5
     
-    finder.run_full_analysis(min_profit_percentage=min_profit, save_results=True)
+    # Customize the results folder name
+    results_folder = "arbitrage_results"
+    
+    finder.run_full_analysis(
+        min_profit_percentage=min_profit, 
+        save_results=True, 
+        results_folder=results_folder
+    )
 
 
 if __name__ == "__main__":

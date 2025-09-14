@@ -1,0 +1,171 @@
+{
+  "timestamp": "2025-09-15T00:44:43.177357",
+  "prices": [
+    {
+      "source": "Milli Gold",
+      "price": 84660000.0,
+      "currency": "ریال",
+      "price_change": "+0,45%",
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Digikala",
+      "price": 84501000.0,
+      "currency": "ریال",
+      "price_change": null,
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Talapp",
+      "price": 84634060.0,
+      "currency": "ریال",
+      "price_change": null,
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Techno",
+      "price": 84670000.0,
+      "currency": "ریال",
+      "price_change": null,
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Wall",
+      "price": 85070000.0,
+      "currency": "ریال",
+      "price_change": "13.14%",
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Melli",
+      "price": 84081000.0,
+      "currency": "ریال",
+      "price_change": "-0.39%",
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Goldika",
+      "price": 84521410.0,
+      "currency": "ریال",
+      "price_change": null,
+      "timestamp": "2025-09-15T00:43:34.735238"
+    },
+    {
+      "source": "Talasea",
+      "price": 85080000.0,
+      "currency": "ریال",
+      "price_change": null,
+      "timestamp": "2025-09-15T00:43:34.735238"
+    }
+  ],
+  "arbitrage_opportunities": [
+    {
+      "buy_source": "Melli",
+      "sell_source": "Talasea",
+      "buy_price": 84081000.0,
+      "sell_price": 85080000.0,
+      "profit_per_gram": 999000.0,
+      "profit_percentage": 1.1881400078495736,
+      "timestamp": "2025-09-15T00:44:43.174428"
+    },
+    {
+      "buy_source": "Melli",
+      "sell_source": "Wall",
+      "buy_price": 84081000.0,
+      "sell_price": 85070000.0,
+      "profit_per_gram": 989000.0,
+      "profit_percentage": 1.176246714477706,
+      "timestamp": "2025-09-15T00:44:43.174415"
+    },
+    {
+      "buy_source": "Melli",
+      "sell_source": "Techno",
+      "buy_price": 84081000.0,
+      "sell_price": 84670000.0,
+      "profit_per_gram": 589000.0,
+      "profit_percentage": 0.7005149796030018,
+      "timestamp": "2025-09-15T00:44:43.174409"
+    },
+    {
+      "buy_source": "Melli",
+      "sell_source": "Milli Gold",
+      "buy_price": 84081000.0,
+      "sell_price": 84660000.0,
+      "profit_per_gram": 579000.0,
+      "profit_percentage": 0.6886216862311343,
+      "timestamp": "2025-09-15T00:44:43.174396"
+    },
+    {
+      "buy_source": "Digikala",
+      "sell_source": "Talasea",
+      "buy_price": 84501000.0,
+      "sell_price": 85080000.0,
+      "profit_per_gram": 579000.0,
+      "profit_percentage": 0.6851989917279085,
+      "timestamp": "2025-09-15T00:44:43.174359"
+    },
+    {
+      "buy_source": "Digikala",
+      "sell_source": "Wall",
+      "buy_price": 84501000.0,
+      "sell_price": 85070000.0,
+      "profit_per_gram": 569000.0,
+      "profit_percentage": 0.6733648122507426,
+      "timestamp": "2025-09-15T00:44:43.174293"
+    },
+    {
+      "buy_source": "Goldika",
+      "sell_source": "Talasea",
+      "buy_price": 84521410.0,
+      "sell_price": 85080000.0,
+      "profit_per_gram": 558590.0,
+      "profit_percentage": 0.6608858039637531,
+      "timestamp": "2025-09-15T00:44:43.174443"
+    },
+    {
+      "buy_source": "Melli",
+      "sell_source": "Talapp",
+      "buy_price": 84081000.0,
+      "sell_price": 84634060.0,
+      "profit_per_gram": 553060.0,
+      "profit_percentage": 0.6577704832245097,
+      "timestamp": "2025-09-15T00:44:43.174403"
+    },
+    {
+      "buy_source": "Goldika",
+      "sell_source": "Wall",
+      "buy_price": 84521410.0,
+      "sell_price": 85070000.0,
+      "profit_per_gram": 548590.0,
+      "profit_percentage": 0.649054482172032,
+      "timestamp": "2025-09-15T00:44:43.174436"
+    },
+    {
+      "buy_source": "Talapp",
+      "sell_source": "Talasea",
+      "buy_price": 84634060.0,
+      "sell_price": 85080000.0,
+      "profit_per_gram": 445940.0,
+      "profit_percentage": 0.5269037075617075,
+      "timestamp": "2025-09-15T00:44:43.174380"
+    },
+    {
+      "buy_source": "Melli",
+      "sell_source": "Goldika",
+      "buy_price": 84081000.0,
+      "sell_price": 84521410.0,
+      "profit_per_gram": 440410.0,
+      "profit_percentage": 0.5237925333904212,
+      "timestamp": "2025-09-15T00:44:43.174422"
+    },
+    {
+      "buy_source": "Talapp",
+      "sell_source": "Wall",
+      "buy_price": 84634060.0,
+      "sell_price": 85070000.0,
+      "profit_per_gram": 435940.0,
+      "profit_percentage": 0.5150881335481248,
+      "timestamp": "2025-09-15T00:44:43.174372"
+    }
+  ]
+}
