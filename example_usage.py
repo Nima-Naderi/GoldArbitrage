@@ -7,6 +7,8 @@ from scrapers.talappGoldScraper import talapp_gold_scraper
 from scrapers.technoGoldScraper import techno_gold_scraper
 from scrapers.wallGoldScraper import wall_gold_scraper
 from scrapers.melliGoldScraper import melli_gold_scraper
+from scrapers.goldikaGoldScraper import goldika_gold_scraper
+from scrapers.talaseaScraper import talasea_gold_scraper
 
 def run_gold_scraper(scraper_function, scraper_name):
     """
@@ -62,7 +64,9 @@ def main():
         (talapp_gold_scraper, "Talapp Gold Scraper"),
         (techno_gold_scraper, "Techno Gold Scraper"),
         (wall_gold_scraper, "Wall Gold Scraper"),
-        (melli_gold_scraper, "Melli Gold Scraper")
+        (melli_gold_scraper, "Melli Gold Scraper"),
+        (goldika_gold_scraper, "Goldika Gold Scraper"),
+        (talasea_gold_scraper, "Talasea Gold Scraper")
     ]
     
     # Run each scraper

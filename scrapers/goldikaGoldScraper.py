@@ -74,6 +74,3 @@ def goldika_gold_scraper():
     finally:
         if driver:
             driver.quit()
-
-data = goldika_gold_scraper()
-print(data)

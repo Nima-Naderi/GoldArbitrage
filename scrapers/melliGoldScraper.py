@@ -101,6 +101,3 @@ def melli_gold_scraper():
     finally:
         if driver:
             driver.quit()
-
-data = melli_gold_scraper()
-print(data)
