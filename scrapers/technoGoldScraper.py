@@ -14,12 +14,12 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.price_converters import remove_comma, toman_to_rial, format_number_with_commas
 
-def talapp_gold_scraper():
+def techno_gold_scraper():
     """
     Scrape gold price and price changes from Talapp Gold website using Selenium
     Returns a dictionary with the scraped data
     """
-    url = "https://talapp.ir/"
+    url = "https://technogold.gold/"
     
     result = {
         'gold_price_18_carat': None,
@@ -44,7 +44,7 @@ def talapp_gold_scraper():
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         
-        driver.set_page_load_timeout(10)
+        driver.set_page_load_timeout(6)
         
         try:
             driver.get(url)
