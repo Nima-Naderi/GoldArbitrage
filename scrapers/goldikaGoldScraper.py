@@ -13,14 +13,14 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.price_converters import remove_comma, toman_to_rial, format_number_with_commas
-from utils.price_converters import remove_zero_from_start
+from utils.price_converters import convert_persian_to_english_digits
 
-def melli_gold_scraper():
+def goldika_gold_scraper():
     """
-    Scrape gold price and price changes from Melli Gold website using Selenium
+    Scrape gold price and price changes from Goldika Gold website using Selenium
     Returns a dictionary with the scraped data
     """
-    url = "https://melligold.com/"
+    url = "https://goldika.ir/"
     
     result = {
         'gold_price_18_carat': None,
@@ -58,41 +58,14 @@ def melli_gold_scraper():
         
         for element in soup.find_all(['div', 'span', 'p']):
             text = element.get_text().strip()
-            if re.search(r'[0-9]', text):
-                price_match = re.search(r'[0-9]{1},[0-9]{3},[0-9]{3}', text)
+            if re.search(r'[۰-۹]', text):
+                price_match = re.search(r'[۰-۹]{1},[۰-۹]{3},[۰-۹]{3}', text)
                 if price_match:
                     toman_price = remove_comma(price_match.group(0))
-                    rial_price = toman_to_rial(toman_price)
+                    english_price = convert_persian_to_english_digits(toman_price)
+                    rial_price = toman_to_rial(english_price)
                     result['gold_price_18_carat'] = format_number_with_commas(rial_price)
                     break
-
-        for element in soup.find_all(['div', 'span', 'p']):
-            text = element.get_text().strip()
-            if re.search(r'[0-9]', text):
-                change_match = re.search(r'([+-]?\d+\.?\d*\s*%)', text)
-                if change_match:
-                    result['price_change'] = remove_zero_from_start(change_match.group(1).replace(' ', ''))
-                    break
-
-        if result['price_change'] and not result['price_change'].startswith(('+', '-')):
-            for element in soup.find_all(['div', 'span', 'p']):
-                text = element.get_text().strip()
-                if result['price_change'].replace('%', '') in text:
-                    classes = ' '.join(element.get('class', []))
-                    style = element.get('style', '')
-
-                    if any(indicator in classes.lower() for indicator in ['green', 'positive', 'up', 'increase']):
-                        result['price_change'] = '+' + result['price_change']
-                        break
-                    elif any(indicator in classes.lower() for indicator in ['red', 'negative', 'down', 'decrease']):
-                        result['price_change'] = '-' + result['price_change']
-                        break
-                    elif 'color: green' in style.lower() or 'color:#green' in style.lower():
-                        result['price_change'] = '+' + result['price_change']
-                        break
-                    elif 'color: red' in style.lower() or 'color:#red' in style.lower():
-                        result['price_change'] = '-' + result['price_change']
-                        break
         
         return result
         
@@ -102,5 +75,5 @@ def melli_gold_scraper():
         if driver:
             driver.quit()
 
-data = melli_gold_scraper()
+data = goldika_gold_scraper()
 print(data)
