@@ -2,14 +2,21 @@
 # -*- coding: utf-8 -*-
 
 from scrapers.miliGoldScraper import scrape_milli_gold, interpret_price_change
+from scrapers.digikalaGoldScraper import digikala_gold_scraper
 
-def SampleMiliGold():
-    """Example usage of the Milli Gold scraper"""
-    print("Example: Using Milli Gold Scraper")
+def run_gold_scraper(scraper_function, scraper_name):
+    """
+    General function to run any gold scraper and display results
+    
+    Args:
+        scraper_function: The scraper function to call
+        scraper_name: Name of the scraper for display purposes
+    """
+    print(f"* Using {scraper_name}")
     print("=" * 40)
     
     # Scrape the data
-    data = scrape_milli_gold()
+    data = scraper_function()
     
     # Check for errors
     if 'error' in data:
@@ -17,7 +24,7 @@ def SampleMiliGold():
         return
     
     # Display the results
-    print("✅ Successfully scraped data from Milli Gold:")
+    print(f"✅ Successfully scraped data from {scraper_name}:")
     print(f"📊 قیمت ۱ گرم طلای ۱۸ عیار: {data['gold_price_18_carat']} {data['currency']}")
     print(f"📈 تغییرات: {data['price_change']}")
     
@@ -41,7 +48,19 @@ def SampleMiliGold():
         print("❓ Trend: Unknown")
 
 def main():
-    SampleMiliGold()
+    print("Gold Arbitrage Scraper Examples")
+    print()
+    
+    # Define scrapers to run
+    scrapers = [
+        (scrape_milli_gold, "Milli Gold Scraper"),
+        (digikala_gold_scraper, "Digikala Gold Scraper")
+    ]
+    
+    # Run each scraper
+    for scraper_function, scraper_name in scrapers:
+        run_gold_scraper(scraper_function, scraper_name)
+        print()
 
 if __name__ == "__main__":
     main() 
