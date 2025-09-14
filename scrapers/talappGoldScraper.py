@@ -17,7 +17,6 @@ def talapp_gold_scraper():
     """
     url = "https://talapp.ir/"
     
-    # Initialize result dictionary
     result = {
         'gold_price_18_carat': None,
         'price_change': None,
@@ -25,7 +24,6 @@ def talapp_gold_scraper():
         'unit': '۱ گرم'
     }
     
-    # Setup Chrome options for fast headless browsing
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
@@ -39,34 +37,27 @@ def talapp_gold_scraper():
     
     driver = None
     try:
-        # Initialize Chrome driver with automatic driver management
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         
-        # Set page load timeout to 10 seconds
         driver.set_page_load_timeout(10)
         
-        # Navigate to the page
         try:
             driver.get(url)
         except Exception as e:
             nothing = True
-            # Continue anyway to try to extract whatever content is available
         
-        # Get the HTML content immediately without waiting
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
         
-        # Look for Persian digit price patterns and convert to English
         for element in soup.find_all(['div', 'span', 'p']):
             text = element.get_text().strip()
             if re.search(r'[0-9]', text):
-                # Look for price patterns with Persian digits
                 price_match = re.search(r'[0-9]{1},[0-9]{3},[0-9]{3}', text)
                 if price_match:
-                    rial_price = price_match.group(0)
-                    rial_price = rial_price.replace(',', '') + "0"
-                    result['gold_price_18_carat'] = rial_price
+                    toman_price = remove_comma(price_match.group(0))
+                    rial_price = toman_to_rial(toman_price)
+                    result['gold_price_18_carat'] = add_comma(rial_price)
                     break
         
         return result

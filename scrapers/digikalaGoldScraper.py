@@ -9,6 +9,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.price_converters import convert_persian_to_english_digits, convert_milligram_price_to_gram_price, remove_comma, format_number_with_commas
 
 def digikala_gold_scraper():
     """
@@ -17,7 +21,6 @@ def digikala_gold_scraper():
     """
     url = "https://digikala.com/wealth/landing/digital-gold"
     
-    # Initialize result dictionary
     result = {
         'gold_price_18_carat': None,
         'price_change': None,
@@ -25,7 +28,6 @@ def digikala_gold_scraper():
         'unit': '۱ گرم'
     }
     
-    # Setup Chrome options for fast headless browsing
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--no-sandbox')
@@ -39,49 +41,30 @@ def digikala_gold_scraper():
     
     driver = None
     try:
-        # Initialize Chrome driver with automatic driver management
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         
-        # Set page load timeout to 5 seconds
         driver.set_page_load_timeout(5)
         
-        # Navigate to the page
         try:
             driver.get(url)
         except Exception as e:
-            # print(f"Page load timeout after 5 seconds.")
             nothing = True
-            # Continue anyway to try to extract whatever content is available
         
-        # Get the HTML content immediately without waiting
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
         
-        # Look for Persian digit price patterns and convert to English
         for element in soup.find_all(['div', 'span', 'p']):
             text = element.get_text().strip()
             if re.search(r'[۰-۹]', text):
-                # Look for price patterns with Persian digits
                 price_match = re.search(r'[۰-۹]{2},[۰-۹]{3}', text)
                 if price_match:
-                    persian_price = price_match.group(0)
-                    # print(f"Found Persian price: {persian_price}")
+                    persian_price = remove_comma(price_match.group(0))
+                    english_price = convert_persian_to_english_digits(persian_price)
+                    converted_to_gram = convert_milligram_price_to_gram_price(english_price)
+                    formatted_price = format_number_with_commas(converted_to_gram)
                     
-                    # Convert Persian digits to English digits
-                    persian_to_english = {
-                        '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
-                        '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9'
-                    }
-                    
-                    english_price = persian_price
-                    for persian, english in persian_to_english.items():
-                        english_price = english_price.replace(persian, english)
-
-                    converted_to_geram = english_price + ",000"
-                    
-                    # print(f"Converted to English: {english_price}")
-                    result['gold_price_18_carat'] = converted_to_geram
+                    result['gold_price_18_carat'] = formatted_price
                     break
         
         return result
