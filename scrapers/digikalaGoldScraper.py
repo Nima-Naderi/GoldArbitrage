@@ -44,7 +44,7 @@ def digikala_gold_scraper():
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         
-        driver.set_page_load_timeout(5)
+        driver.set_page_load_timeout(6)
         
         try:
             driver.get(url)

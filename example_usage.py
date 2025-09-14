@@ -3,6 +3,7 @@
 
 from scrapers.miliGoldScraper import scrape_milli_gold, interpret_price_change
 from scrapers.digikalaGoldScraper import digikala_gold_scraper
+from scrapers.talappGoldScraper import talapp_gold_scraper
 
 def run_gold_scraper(scraper_function, scraper_name):
     """
@@ -54,7 +55,8 @@ def main():
     # Define scrapers to run
     scrapers = [
         (scrape_milli_gold, "Milli Gold Scraper"),
-        (digikala_gold_scraper, "Digikala Gold Scraper")
+        (digikala_gold_scraper, "Digikala Gold Scraper"),
+        (talapp_gold_scraper, "Talapp Gold Scraper")
     ]
     
     # Run each scraper

@@ -9,6 +9,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import time
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils.price_converters import remove_comma, toman_to_rial, format_number_with_commas
 
 def talapp_gold_scraper():
     """
@@ -57,7 +61,7 @@ def talapp_gold_scraper():
                 if price_match:
                     toman_price = remove_comma(price_match.group(0))
                     rial_price = toman_to_rial(toman_price)
-                    result['gold_price_18_carat'] = add_comma(rial_price)
+                    result['gold_price_18_carat'] = format_number_with_commas(rial_price)
                     break
         
         return result

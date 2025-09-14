@@ -59,18 +59,6 @@ def toman_to_rial(toman_price):
     """
     return toman_price + "0"
 
-def add_comma(price):
-    """
-    Add comma to price
-    
-    Args:
-        price (str): Price without comma
-        
-    Returns:
-        str: Price with comma
-    """
-    return price.replace(',', '')
-
 
 def format_number_with_commas(number_str):
     """
