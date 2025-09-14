@@ -3,7 +3,7 @@
 
 from scrapers.miliGoldScraper import scrape_milli_gold, interpret_price_change
 
-def main():
+def SampleMiliGold():
     """Example usage of the Milli Gold scraper"""
     print("Example: Using Milli Gold Scraper")
     print("=" * 40)
@@ -39,6 +39,9 @@ def main():
         print("📈 Trend: Increasing (Bullish)")
     else:
         print("❓ Trend: Unknown")
+
+def main():
+    SampleMiliGold()
 
 if __name__ == "__main__":
     main() 
