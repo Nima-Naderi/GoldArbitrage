@@ -81,3 +81,15 @@ def format_number_with_commas(number_str):
     reversed_number = clean_number[::-1]
     formatted_reversed = ','.join(reversed_number[i:i+3] for i in range(0, len(reversed_number), 3))
     return formatted_reversed[::-1]
+
+def remove_zero_from_start(price):
+    """
+    Remove zero from start of price
+    
+    Args:
+        price (str): Price with zero from start
+        
+    Returns:
+        str: Price without zero from start
+    """
+    return price.lstrip('0')

@@ -13,13 +13,14 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.price_converters import remove_comma, toman_to_rial, format_number_with_commas
+from utils.price_converters import remove_zero_from_start
 
-def techno_gold_scraper():
+def wall_gold_scraper():
     """
-    Scrape gold price and price changes from Techno Gold website using Selenium
+    Scrape gold price and price changes from Wall Gold website using Selenium
     Returns a dictionary with the scraped data
     """
-    url = "https://technogold.gold/"
+    url = "https://wallgold.ir/"
     
     result = {
         'gold_price_18_carat': None,
@@ -44,10 +45,11 @@ def techno_gold_scraper():
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=chrome_options)
         
-        driver.set_page_load_timeout(6)
+        driver.set_page_load_timeout(5)
         
         try:
             driver.get(url)
+            time.sleep(2)
         except Exception as e:
             nothing = True
         
@@ -63,6 +65,35 @@ def techno_gold_scraper():
                     rial_price = toman_to_rial(toman_price)
                     result['gold_price_18_carat'] = format_number_with_commas(rial_price)
                     break
+
+        for element in soup.find_all(['div', 'span', 'p']):
+            text = element.get_text().strip()
+            if re.search(r'[0-9]', text):
+                change_match = re.search(r'(\d+\.?\d*%)', text)
+                if change_match:
+                    result['price_change'] = remove_zero_from_start(change_match.group(1))
+                    break
+
+        if result['price_change'] and not result['price_change'].startswith(('+', '-')):
+            for element in soup.find_all(['div', 'span', 'p']):
+                text = element.get_text().strip()
+                if result['price_change'].replace('%', '') in text:
+                    classes = ' '.join(element.get('class', []))
+                    style = element.get('style', '')
+
+                    if any(indicator in classes.lower() for indicator in ['green', 'positive', 'up', 'increase']):
+                        result['price_change'] = '+' + result['price_change']
+                        break
+                    elif any(indicator in classes.lower() for indicator in ['red', 'negative', 'down', 'decrease']):
+                        result['price_change'] = '-' + result['price_change']
+                        break
+                    elif 'color: green' in style.lower() or 'color:#green' in style.lower():
+                        result['price_change'] = '+' + result['price_change']
+                        break
+                    elif 'color: red' in style.lower() or 'color:#red' in style.lower():
+                        result['price_change'] = '-' + result['price_change']
+                        break
+        #TODO: Add more indicators for this website
         
         return result
         
