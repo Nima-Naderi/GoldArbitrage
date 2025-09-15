@@ -9,10 +9,6 @@ Automated gold price monitoring and arbitrage opportunity detection with Telegra
 # Install dependencies
 pip install -r requirements.txt
 
-# Install Redis
-brew install redis && brew services start redis  # macOS
-# or: sudo apt install redis-server && sudo systemctl start redis  # Linux
-
 # Configure Telegram bot
 cp .env.example .env
 # Edit .env with your bot token and channel ID
@@ -21,15 +17,15 @@ cp .env.example .env
 ### 2. Run
 ```bash
 # Start the bot
-python start_bot.py
+python simple_bot.py
 ```
 
 ## 📊 Features
 
 - **9 Gold Sources**: Scrapes prices from major Iranian gold websites
-- **Real-time Analysis**: Finds arbitrage opportunities every 5 minutes
+- **Real-time Analysis**: Finds arbitrage opportunities every 4 minutes
 - **Telegram Notifications**: Sends formatted reports to your channel
-- **Automated Scheduling**: Runs 24/7 with Celery
+- **Simple Scheduling**: Runs 24/7 with a simple while loop
 - **Data Export**: Saves results to JSON files
 
 ## 🏪 Supported Websites
@@ -47,14 +43,8 @@ python start_bot.py
 ## 🎯 Usage
 
 ```bash
-# Test connection
-python telegram_arbitrage_bot.py test
-
-# Manual run
-python telegram_arbitrage_bot.py manual
-
-# Start automated bot
-python start_bot.py
+# Run the bot
+python simple_bot.py
 ```
 
 ## 📱 Telegram Setup
@@ -71,15 +61,13 @@ GoldArbitrage/
 ├── scrapers/           # Gold price scrapers
 ├── utils/              # Price conversion utilities
 ├── gold_arbitrage_finder.py    # Main analysis engine
-├── telegram_arbitrage_bot.py   # Telegram bot & Celery tasks
-├── start_bot.py        # Automated startup script
+├── simple_bot.py       # The bot (run this!)
 └── arbitrage_results/  # Generated reports
 ```
 
 ## 🔧 Requirements
 
 - Python 3.8+
-- Redis
 - Telegram Bot Token
 - Internet connection
 
@@ -104,10 +92,10 @@ GoldArbitrage/
 
 ## 🛠️ Troubleshooting
 
-- **Redis not running**: `brew services start redis`
-- **No messages**: Check bot token and channel ID
+- **No messages**: Check bot token and channel ID in .env file
 - **Scrapers failing**: Some sites may block requests
-- **Process issues**: Restart with `python start_bot.py`
+- **Bot stops**: Check internet connection and restart
+- **Connection issues**: Bot automatically tests Telegram connection on startup
 
 ## 📄 License
 
