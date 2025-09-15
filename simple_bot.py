@@ -226,7 +226,7 @@ class ArbitrageReporter:
                 message += f"⚠️ Market shows high volatility (good for arbitrage)\n"
         
         # Footer
-        message += f"\n🤖 <i>Automated Gold Arbitrage Bot - Updated every 4 minutes</i>"
+        message += f"\n🤖 <i>Automated Gold Arbitrage Bot</i>"
         
         return message
     
@@ -364,7 +364,7 @@ def main():
     # Send startup message
     try:
         telegram_sender = TelegramSender(TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
-        startup_message = "🚀 <b>Gold Arbitrage Bot Started</b>\n\nBot is now running and will send reports every 4 minutes."
+        startup_message = "🚀 <b>Gold Arbitrage Bot Started</b>\n\nBot is now running and will send reports every 5 minutes."
         telegram_sender.send_message(startup_message)
     except:
         pass
