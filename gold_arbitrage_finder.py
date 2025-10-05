@@ -215,7 +215,7 @@ class GoldArbitrageFinder:
             self.log(f"   💵 Buy Price:  {format_number_with_commas(str(int(opp.buy_price)))} Rial")
             self.log(f"   💰 Sell Price: {format_number_with_commas(str(int(opp.sell_price)))} Rial")
             self.log(f"   📈 Profit:     {format_number_with_commas(str(int(opp.profit_per_gram)))} Rial per gram")
-            self.log(f"   📊 ROI:        {opp.profit_percentage:.2f}%")
+            self.log(f"   📊 Profit %:   {opp.profit_percentage:.2f}%")
             self.log("")
         
         # Summary statistics
