@@ -179,7 +179,7 @@ class ArbitrageReporter:
                 message += f"    💵 Buy:  {self.format_price(opp.buy_price)} Rial\n"
                 message += f"    💰 Sell: {self.format_price(opp.sell_price)} Rial\n"
                 message += f"    📈 Profit: {self.format_price(opp.profit_per_gram)} Rial\n"
-                message += f"    🎯 ROI: {opp.profit_percentage:.2f}%\n\n"
+                message += f"    🎯 Profit %: {opp.profit_percentage:.2f}%\n\n"
             
             # Summary statistics
             max_profit_percentage = max(opp.profit_percentage for opp in finder.arbitrage_opportunities)
@@ -192,9 +192,9 @@ class ArbitrageReporter:
             
             message += f"📊 <b>OPPORTUNITY STATISTICS:</b>\n"
             message += f"🎯 Best Profit: {self.format_price(max_profit_rial)} Rial ({best_opp.buy_source} → {best_opp.sell_source})\n"
-            message += f"📈 Best ROI: {max_profit_percentage:.2f}%\n"
-            message += f"📉 Lowest ROI: {min_profit_percentage:.2f}%\n"
-            message += f"📊 Average ROI: {avg_profit_percentage:.2f}%\n"
+            message += f"📈 Best Profit %: {max_profit_percentage:.2f}%\n"
+            message += f"📉 Lowest Profit %: {min_profit_percentage:.2f}%\n"
+            message += f"📊 Average Profit %: {avg_profit_percentage:.2f}%\n"
             message += f"🔢 Total Opportunities: {len(finder.arbitrage_opportunities)}\n"
             
             # Profit analysis
@@ -276,22 +276,14 @@ def check_requirements():
 
 
 def test_telegram_connection():
-    """Test Telegram bot connection"""
-    print("🔍 Testing Telegram connection...")
-    
+    """Test Telegram bot connection (no message sent)"""
     try:
-        telegram_sender = TelegramSender(TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
-        test_message = "🧪 <b>Gold Arbitrage Bot Test</b>\n\nBot is working correctly!"
-        
-        success = telegram_sender.send_message(test_message)
-        if success:
-            print("✅ Telegram connection working")
-            return True
-        else:
-            print("❌ Telegram connection failed")
-            return False
-    except Exception as e:
-        print(f"❌ Telegram test error: {e}")
+        # Perform a lightweight getMe API call instead of sending a message
+        url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getMe"
+        response = requests.get(url, timeout=15)
+        response.raise_for_status()
+        return True
+    except Exception:
         return False
 
 
@@ -361,14 +353,6 @@ def main():
     print("Press Ctrl+C to stop")
     print()
     
-    # Send startup message
-    try:
-        telegram_sender = TelegramSender(TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
-        startup_message = "🚀 <b>Gold Arbitrage Bot Started</b>\n\nBot is now running and will send reports every 5 minutes."
-        telegram_sender.send_message(startup_message)
-    except:
-        pass
-    
     # Main loop
     try:
         while True:
@@ -388,15 +372,6 @@ def main():
             
     except KeyboardInterrupt:
         print("\n🛑 Stopping bot...")
-        
-        # Send shutdown message
-        try:
-            telegram_sender = TelegramSender(TELEGRAM_BOT_TOKEN, TELEGRAM_CHANNEL_ID)
-            shutdown_message = "🛑 <b>Gold Arbitrage Bot Stopped</b>\n\nBot has been stopped by user."
-            telegram_sender.send_message(shutdown_message)
-        except:
-            pass
-        
         print("✅ Bot stopped")
         return True
     
