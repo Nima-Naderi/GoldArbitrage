@@ -60,6 +60,13 @@ class GoldArbitrageFinder:
         }
         self.prices: List[GoldPrice] = []
         self.arbitrage_opportunities: List[ArbitrageOpportunity] = []
+        # Verbose logging toggle via environment variable
+        import os
+        self.verbose = os.getenv('VERBOSE', '0') in ('1', 'true', 'True')
+
+    def log(self, message: str):
+        if self.verbose:
+            print(message)
     
     def normalize_price(self, price_str: str) -> float:
         """
@@ -94,22 +101,22 @@ class GoldArbitrageFinder:
         Returns:
             List[GoldPrice]: List of gold prices from all sources
         """
-        print("🔍 Starting to scrape gold prices from all sources...")
-        print("=" * 60)
+        self.log("🔍 Starting to scrape gold prices from all sources...")
+        self.log("=" * 60)
         
         prices = []
         current_time = datetime.now()
         
         for source_name, scraper_func in self.scrapers.items():
             try:
-                print(f"📊 Scraping {source_name}...")
+                self.log(f"📊 Scraping {source_name}...")
                 
                 # Scrape the data
                 data = scraper_func()
                 
                 # Check for errors
                 if 'error' in data:
-                    print(f"❌ {source_name}: {data['error']}")
+                    self.log(f"❌ {source_name}: {data['error']}")
                     continue
                 
                 # Normalize the price
@@ -125,19 +132,19 @@ class GoldArbitrageFinder:
                         raw_data=data
                     )
                     prices.append(gold_price)
-                    print(f"✅ {source_name}: {format_number_with_commas(str(int(normalized_price)))} {data.get('currency', 'Rial')}")
+                    self.log(f"✅ {source_name}: {format_number_with_commas(str(int(normalized_price)))} {data.get('currency', 'Rial')}")
                 else:
-                    print(f"⚠️  {source_name}: Could not parse price")
+                    self.log(f"⚠️  {source_name}: Could not parse price")
                 
                 # Small delay to be respectful to websites
                 time.sleep(1)
                 
             except Exception as e:
-                print(f"❌ {source_name}: Error - {str(e)}")
+                self.log(f"❌ {source_name}: Error - {str(e)}")
                 continue
         
         self.prices = prices
-        print(f"\n📈 Successfully scraped {len(prices)} sources")
+        self.log(f"\n📈 Successfully scraped {len(prices)} sources")
         return prices
     
     def find_arbitrage_opportunities(self, min_profit_percentage: float = 0.5) -> List[ArbitrageOpportunity]:
@@ -151,11 +158,11 @@ class GoldArbitrageFinder:
             List[ArbitrageOpportunity]: List of arbitrage opportunities
         """
         if len(self.prices) < 2:
-            print("⚠️  Need at least 2 price sources to find arbitrage opportunities")
+            self.log("⚠️  Need at least 2 price sources to find arbitrage opportunities")
             return []
         
-        print(f"\n🔍 Analyzing arbitrage opportunities (min profit: {min_profit_percentage}%)...")
-        print("=" * 60)
+        self.log(f"\n🔍 Analyzing arbitrage opportunities (min profit: {min_profit_percentage}%)...")
+        self.log("=" * 60)
         
         opportunities = []
         
@@ -190,59 +197,59 @@ class GoldArbitrageFinder:
     def print_arbitrage_report(self):
         """Print a comprehensive arbitrage report"""
         if not self.arbitrage_opportunities:
-            print("\n❌ No arbitrage opportunities found with the current criteria")
+            self.log("\n❌ No arbitrage opportunities found with the current criteria")
             return
         
-        print(f"\n💰 ARBITRAGE OPPORTUNITIES REPORT")
-        print("=" * 60)
-        print(f"📅 Generated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"📊 Total opportunities found: {len(self.arbitrage_opportunities)}")
-        print()
+        self.log(f"\n💰 ARBITRAGE OPPORTUNITIES REPORT")
+        self.log("=" * 60)
+        self.log(f"📅 Generated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        self.log(f"📊 Total opportunities found: {len(self.arbitrage_opportunities)}")
+        self.log("")
         
         # Top 5 opportunities
-        print("🏆 TOP 5 ARBITRAGE OPPORTUNITIES:")
-        print("-" * 60)
+        self.log("🏆 TOP 5 ARBITRAGE OPPORTUNITIES:")
+        self.log("-" * 60)
         
         for i, opp in enumerate(self.arbitrage_opportunities[:5], 1):
-            print(f"{i}. BUY from {opp.buy_source} → SELL to {opp.sell_source}")
-            print(f"   💵 Buy Price:  {format_number_with_commas(str(int(opp.buy_price)))} Rial")
-            print(f"   💰 Sell Price: {format_number_with_commas(str(int(opp.sell_price)))} Rial")
-            print(f"   📈 Profit:     {format_number_with_commas(str(int(opp.profit_per_gram)))} Rial per gram")
-            print(f"   📊 ROI:        {opp.profit_percentage:.2f}%")
-            print()
+            self.log(f"{i}. BUY from {opp.buy_source} → SELL to {opp.sell_source}")
+            self.log(f"   💵 Buy Price:  {format_number_with_commas(str(int(opp.buy_price)))} Rial")
+            self.log(f"   💰 Sell Price: {format_number_with_commas(str(int(opp.sell_price)))} Rial")
+            self.log(f"   📈 Profit:     {format_number_with_commas(str(int(opp.profit_per_gram)))} Rial per gram")
+            self.log(f"   📊 ROI:        {opp.profit_percentage:.2f}%")
+            self.log("")
         
         # Summary statistics
         if self.arbitrage_opportunities:
             max_profit = max(opp.profit_percentage for opp in self.arbitrage_opportunities)
             avg_profit = sum(opp.profit_percentage for opp in self.arbitrage_opportunities) / len(self.arbitrage_opportunities)
             
-            print("📊 SUMMARY STATISTICS:")
-            print("-" * 60)
-            print(f"🎯 Maximum profit opportunity: {max_profit:.2f}%")
-            print(f"📊 Average profit opportunity: {avg_profit:.2f}%")
-            print(f"🔢 Total opportunities: {len(self.arbitrage_opportunities)}")
+            self.log("📊 SUMMARY STATISTICS:")
+            self.log("-" * 60)
+            self.log(f"🎯 Maximum profit opportunity: {max_profit:.2f}%")
+            self.log(f"📊 Average profit opportunity: {avg_profit:.2f}%")
+            self.log(f"🔢 Total opportunities: {len(self.arbitrage_opportunities)}")
     
     def print_price_summary(self):
         """Print a summary of all scraped prices"""
         if not self.prices:
-            print("❌ No prices available")
+            self.log("❌ No prices available")
             return
         
-        print(f"\n📊 GOLD PRICE SUMMARY")
-        print("=" * 60)
-        print(f"📅 Scraped at: {self.prices[0].timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
-        print()
+        self.log(f"\n📊 GOLD PRICE SUMMARY")
+        self.log("=" * 60)
+        self.log(f"📅 Scraped at: {self.prices[0].timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+        self.log("")
         
         # Sort prices by value
         sorted_prices = sorted(self.prices, key=lambda x: x.price)
         
-        print("💰 PRICES BY SOURCE (Lowest to Highest):")
-        print("-" * 60)
+        self.log("💰 PRICES BY SOURCE (Lowest to Highest):")
+        self.log("-" * 60)
         
         for price in sorted_prices:
-            print(f"🏪 {price.source:<12}: {format_number_with_commas(str(int(price.price))):>12} Rial")
+            self.log(f"🏪 {price.source:<12}: {format_number_with_commas(str(int(price.price))):>12} Rial")
             if price.price_change:
-                print(f"   📈 Change: {price.price_change}")
+                self.log(f"   📈 Change: {price.price_change}")
         
         # Price range analysis
         if len(sorted_prices) > 1:
@@ -251,11 +258,11 @@ class GoldArbitrageFinder:
             price_range = highest.price - lowest.price
             range_percentage = (price_range / lowest.price) * 100
             
-            print(f"\n📊 PRICE RANGE ANALYSIS:")
-            print("-" * 60)
-            print(f"🔻 Lowest:  {format_number_with_commas(str(int(lowest.price)))} Rial ({lowest.source})")
-            print(f"🔺 Highest: {format_number_with_commas(str(int(highest.price)))} Rial ({highest.source})")
-            print(f"📏 Range:   {format_number_with_commas(str(int(price_range)))} Rial ({range_percentage:.2f}%)")
+            self.log(f"\n📊 PRICE RANGE ANALYSIS:")
+            self.log("-" * 60)
+            self.log(f"🔻 Lowest:  {format_number_with_commas(str(int(lowest.price)))} Rial ({lowest.source})")
+            self.log(f"🔺 Highest: {format_number_with_commas(str(int(highest.price)))} Rial ({highest.source})")
+            self.log(f"📏 Range:   {format_number_with_commas(str(int(price_range)))} Rial ({range_percentage:.2f}%)")
     
     def save_results_to_file(self, filename: str = None, results_folder: str = "arbitrage_results"):
         """Save results to a JSON file in a specific folder"""
@@ -264,7 +271,7 @@ class GoldArbitrageFinder:
         # Create results folder if it doesn't exist
         if not os.path.exists(results_folder):
             os.makedirs(results_folder)
-            print(f"📁 Created results folder: {results_folder}")
+            self.log(f"📁 Created results folder: {results_folder}")
         
         if filename is None:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -302,7 +309,7 @@ class GoldArbitrageFinder:
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(results, f, indent=2, ensure_ascii=False)
         
-        print(f"\n💾 Results saved to: {file_path}")
+        self.log(f"\n💾 Results saved to: {file_path}")
     
     def run_full_analysis(self, min_profit_percentage: float = 0.5, save_results: bool = True, results_folder: str = "arbitrage_results"):
         """
@@ -313,16 +320,16 @@ class GoldArbitrageFinder:
             save_results: Whether to save results to file
             results_folder: Folder to save results in
         """
-        print("🚀 GOLD ARBITRAGE FINDER")
-        print("=" * 60)
-        print("Starting comprehensive gold price analysis...")
-        print()
+        self.log("🚀 GOLD ARBITRAGE FINDER")
+        self.log("=" * 60)
+        self.log("Starting comprehensive gold price analysis...")
+        self.log("")
         
         # Step 1: Scrape all sources
         self.scrape_all_sources()
         
         if not self.prices:
-            print("❌ No prices could be scraped. Exiting.")
+            self.log("❌ No prices could be scraped. Exiting.")
             return
         
         # Step 2: Print price summary
@@ -338,7 +345,7 @@ class GoldArbitrageFinder:
         if save_results:
             self.save_results_to_file(results_folder=results_folder)
         
-        print(f"\n✅ Analysis complete! Found {len(self.arbitrage_opportunities)} arbitrage opportunities.")
+        self.log(f"\n✅ Analysis complete! Found {len(self.arbitrage_opportunities)} arbitrage opportunities.")
 
 
 def main():

@@ -137,25 +137,4 @@ def interpret_price_change(change_str):
         # If no sign, assume positive (common convention)
         return f"📈 تغییر {change_str} (احتمالاً مثبت)"
 
-def main():
-    """Main function to run the scraper"""
-    print("Scraping Milli Gold website...")
-    print("=" * 50)
-    
-    data = scrape_milli_gold()
-    
-    if 'error' in data:
-        print(f"Error occurred: {data['error']}")
-        return
-    
-    print(f"قیمت ۱ گرم طلای ۱۸ عیار: {data['gold_price_18_carat']} {data['currency']}")
-    print(f"تغییرات: {data['price_change']}")
-    
-    # Show interpreted change
-    change_interpretation = interpret_price_change(data['price_change'])
-    print(f"تفسیر تغییرات: {change_interpretation}")
-    
-    return data
-
-if __name__ == "__main__":
-    main()
+ 

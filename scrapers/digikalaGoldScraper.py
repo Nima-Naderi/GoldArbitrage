@@ -81,10 +81,4 @@ def digikala_gold_scraper():
     finally:
         if driver:
             driver.quit()
-
-
-def main():
-    print(digikala_gold_scraper())
-
-if __name__ == "__main__":
-    main()
+ 
