@@ -16,6 +16,8 @@ def convert_persian_to_english_digits(persian_text):
         '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9'
     }
     
+    if persian_text is None:
+        return ""
     english_text = persian_text
     for persian, english in persian_to_english.items():
         english_text = english_text.replace(persian, english)
@@ -33,6 +35,8 @@ def convert_milligram_price_to_gram_price(milligram_price):
     Returns:
         str: Price in grams (e.g., "12,345,000")
     """
+    if not milligram_price:
+        return ""
     return milligram_price + ",000"
 
 def remove_comma(price):
@@ -45,6 +49,8 @@ def remove_comma(price):
     Returns:
         str: Price without comma
     """
+    if not price:
+        return ""
     return price.replace(',', '')
 
 def toman_to_rial(toman_price):
@@ -71,6 +77,8 @@ def format_number_with_commas(number_str):
         str: Formatted number with commas (e.g., "12,123,123,123")
     """
     # Remove any existing commas first
+    if not number_str:
+        return ""
     clean_number = number_str.replace(',', '')
     
     # Add commas every 3 digits from the right
@@ -92,4 +100,6 @@ def remove_zero_from_start(price):
     Returns:
         str: Price without zero from start
     """
+    if not price:
+        return ""
     return price.lstrip('0')

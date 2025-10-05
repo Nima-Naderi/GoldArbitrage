@@ -3,11 +3,10 @@ from bs4 import BeautifulSoup
 import re
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+ 
+ 
+ 
+ 
 import time
 import sys
 import os
@@ -42,16 +41,15 @@ def goldika_gold_scraper():
     
     driver = None
     try:
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
         
-        driver.set_page_load_timeout(10)
+        driver.set_page_load_timeout(30)
         
         try:
             driver.get(url)
-            time.sleep(4)
-        except Exception as e:
-            nothing = True
+            time.sleep(8)
+        except Exception:
+            pass
         
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
@@ -59,7 +57,7 @@ def goldika_gold_scraper():
         for element in soup.find_all(['div', 'span', 'p']):
             text = element.get_text().strip()
             if re.search(r'[۰-۹]', text):
-                price_match = re.search(r'[۰-۹]{1},[۰-۹]{3},[۰-۹]{3}', text)
+                price_match = re.search(r'[۰-۹]{1,3}(?:,[۰-۹]{3})+', text)
                 if price_match:
                     toman_price = remove_comma(price_match.group(0))
                     english_price = convert_persian_to_english_digits(toman_price)

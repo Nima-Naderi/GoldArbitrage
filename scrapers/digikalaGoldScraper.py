@@ -1,13 +1,11 @@
-import requests
 from bs4 import BeautifulSoup
 import re
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from webdriver_manager.chrome import ChromeDriverManager
+ 
+ 
+ 
+ 
 import time
 import sys
 import os
@@ -41,15 +39,15 @@ def digikala_gold_scraper():
     
     driver = None
     try:
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=chrome_options)
+        driver = webdriver.Chrome(options=chrome_options)
         
-        driver.set_page_load_timeout(6)
+        driver.set_page_load_timeout(30)
         
         try:
             driver.get(url)
-        except Exception as e:
-            nothing = True
+            time.sleep(8)
+        except Exception:
+            pass
         
         page_source = driver.page_source
         soup = BeautifulSoup(page_source, 'html.parser')
@@ -57,13 +55,22 @@ def digikala_gold_scraper():
         for element in soup.find_all(['div', 'span', 'p']):
             text = element.get_text().strip()
             if re.search(r'[۰-۹]', text):
-                price_match = re.search(r'[۰-۹]{2},[۰-۹]{3}', text)
+                price_match = re.search(r'[۰-۹]{2,3},[۰-۹]{3}', text)
                 if price_match:
                     persian_price = remove_comma(price_match.group(0))
                     english_price = convert_persian_to_english_digits(persian_price)
                     converted_to_gram = convert_milligram_price_to_gram_price(english_price)
                     formatted_price = format_number_with_commas(converted_to_gram)
                     
+                    result['gold_price_18_carat'] = formatted_price
+                    break
+            # Fallback: match Latin digits if Persian digits not found
+            if re.search(r'[0-9]', text) and result['gold_price_18_carat'] is None:
+                price_match_latin = re.search(r'\d{2,3},\d{3}', text)
+                if price_match_latin:
+                    latin_price = remove_comma(price_match_latin.group(0))
+                    converted_to_gram = convert_milligram_price_to_gram_price(latin_price)
+                    formatted_price = format_number_with_commas(converted_to_gram)
                     result['gold_price_18_carat'] = formatted_price
                     break
         
@@ -74,3 +81,10 @@ def digikala_gold_scraper():
     finally:
         if driver:
             driver.quit()
+
+
+def main():
+    print(digikala_gold_scraper())
+
+if __name__ == "__main__":
+    main()
